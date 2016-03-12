@@ -57,27 +57,27 @@ def parse(search_term, search_tag, p):
             item_format = search_row.find('h3', 'a-size-small a-color-null s-inline  a-text-normal').text.strip()
         except:
             pass
-        price_rent = ''
+        rentprice = ''
         try:
-            price_rent = search_row.find('div', 'a-fixed-left-grid-col a-col-right').find(text=re.compile('to rent')).find_previous('span', 'a-size-base a-color-price s-price a-text-bold').text
+            rentprice = search_row.find('div', 'a-fixed-left-grid-col a-col-right').find(text=re.compile('to rent')).find_previous('span', 'a-size-base a-color-price s-price a-text-bold').text
         except:
             pass
-        price = ''
+        amazon_new_s = ''
         try:
-            price = search_row.find('div', 'a-fixed-left-grid-col a-col-right').find(text=re.compile('to buy')).find_previous('span', 'a-size-base a-color-price s-price a-text-bold').text
+            amazon_new_s = search_row.find('div', 'a-fixed-left-grid-col a-col-right').find(text=re.compile('to buy')).find_previous('span', 'a-size-base a-color-price s-price a-text-bold').text
         except:
             try:
-                price = search_row.find('div', 'a-fixed-left-grid-col a-col-right').find('span', 'a-size-small a-color-secondary a-text-strike').find_previous('span', 'a-size-base a-color-price s-price a-text-bold').text
+                amazon_new_s = search_row.find('div', 'a-fixed-left-grid-col a-col-right').find('span', 'a-size-small a-color-secondary a-text-strike').find_previous('span', 'a-size-base a-color-price s-price a-text-bold').text
             except:
                 pass
-        low_price = ''
+        lowall_0_s = ''
         try:
-            low_price = search_row.find('div', 'a-fixed-left-grid-col a-col-right').find(text=re.compile('used & new')).find_previous('span', 'a-size-base a-color-price a-text-bold').text
+            lowall_0_s = search_row.find('div', 'a-fixed-left-grid-col a-col-right').find(text=re.compile('used & new')).find_previous('span', 'a-size-base a-color-price a-text-bold').text
         except:
             pass
-        offer_count = ''
+        totaloffercount = ''
         try:
-            offer_count = search_row.find('div', 'a-fixed-left-grid-col a-col-right').find(text=re.compile('offers')).replace('(', '').replace(')','')
+            totaloffercount = search_row.find('div', 'a-fixed-left-grid-col a-col-right').find(text=re.compile('offers')).replace('(', '').replace(')','')
         except:
             pass
         other1format = ''
@@ -127,12 +127,12 @@ def parse(search_term, search_tag, p):
             pass
         if newer:
             newer = '='+'"'+newer['href'].split('dp/')[-1].split('/')[0]+'"'
-        tradein = ''
+        tradeinprice = ''
         try:
-            tradein = search_row.find('div', 'a-fixed-left-grid-col a-col-right').find(text=re.compile('Trade in yours for')).find_next('span', 'a-color-price').text
+            tradeinprice = search_row.find('div', 'a-fixed-left-grid-col a-col-right').find(text=re.compile('Trade in yours for')).find_next('span', 'a-color-price').text
         except:
             pass
-        new_stock_count = new_stock_status = new_restock_date = ''
+        new_stock_count_s = new_stock_status_s = new_restock_date_s = ''
         try:
             new_stock_count = search_row.find('span', text=re.compile('left in stock - order soon')).text.strip()
         except:
@@ -156,42 +156,42 @@ def parse(search_term, search_tag, p):
                                 except:
                                     pass
         if 'left in stock - order soon' in new_stock_count:
-            new_stock_count = new_stock_count.split('left')[0].split('Only')[-1].strip()
-            new_stock_status = 'limited'
-            new_restock_date = 'na'
+            new_stock_count_s = new_stock_count.split('left')[0].split('Only')[-1].strip()
+            new_stock_status_s = 'limited'
+            new_restock_date_s = 'na'
         elif 'Get it by' in new_stock_count:
-            new_stock_count = 999
-            new_stock_status = 'in stock'
-            new_restock_date = None
+            new_stock_count_s = 999
+            new_stock_status_s = 'in stock'
+            new_restock_date_s = None
         elif 'Temporarily out of stock' in new_stock_count:
-            new_stock_count = 0
-            new_stock_status = 'Temporarily out'
-            new_restock_date = 'temp'
+            new_stock_count_s = 0
+            new_stock_status_s = 'Temporarily out'
+            new_restock_date_s = 'temp'
         elif 'Currently unavailable' in new_stock_count:
-            new_stock_count = 0
-            new_stock_status = 'unavailable'
-            new_restock_date = 'unknown'
+            new_stock_count_s = 0
+            new_stock_status_s = 'unavailable'
+            new_restock_date_s = 'unknown'
         elif 'may require an extra' in new_stock_count:
-            new_restock_date = new_stock_count.split('an')[-1].strip().split('to')[0].strip()
-            new_stock_count = 0
-            new_stock_status = 'extra processing'
+            new_restock_date_s = new_stock_count.split('an')[-1].strip().split('to')[0].strip()
+            new_stock_count_s = 0
+            new_stock_status_s = 'extra processing'
         elif 'Available for Pre-order' in new_stock_count:
-            new_restock_date = new_stock_count.split('on')[-1].strip()
-            new_stock_count = 0
-            new_stock_status = 'pre-order'
+            new_restock_date_s = new_stock_count.split('on')[-1].strip()
+            new_stock_count_s = 0
+            new_stock_status_s = 'pre-order'
         elif 'In stock on' in new_stock_count:
-            new_restock_date = new_stock_count.split('on')[-1].strip()
-            new_stock_count = 0
-            new_stock_status = 'replenishing'
+            new_restock_date_s = new_stock_count.split('on')[-1].strip()
+            new_stock_count_s = 0
+            new_stock_status_s = 'replenishing'
         elif not new_stock_count:
-            new_stock_status = 'in stock'
+            new_stock_status_s = 'in stock'
 
 
 
         # print new_stock_count, new_stock_status, new_restock_date
         # print title, asin, pubdate, author, item_format, price_rent, price, low_price, offer_count, other1format, other1asin, other2format, other2asin, other3format, other3asin, newer, tradein
         today_date = str(datetime.now())
-        scraperwiki.sqlite.save(unique_keys=['Date'], data={'SearchString': unicode(search_term), 'Search Tag': search_tag, 'Title': unicode(title), 'ASIN': asin, 'PubDate': pubdate, 'Author': unicode(author), 'Format': unicode(item_format), 'PriceRent': price_rent, 'Price': price, 'PriceLow': low_price, 'OfferCount': offer_count, 'Other1Format': unicode(other1format), 'Other1ASIN': other1asin, 'Other2Format': unicode(other2format), 'Other2ASIN': other2asin, 'Other3Format': unicode(other3format), 'Other3ASIN': other3asin, 'Newer_Edition': newer, 'TradeIn': unicode(tradein), 'NewStockCount': new_stock_count, 'NewStockStatus': new_stock_status, 'NewRestockDate': new_restock_date, 'Date': today_date})
+        scraperwiki.sqlite.save(unique_keys=['Date'], data={'SearchString': unicode(search_term), 'Search Tag': search_tag, 'Title': unicode(title), 'ASIN': asin, 'PubDate': pubdate, 'Author': unicode(author), 'Format': unicode(item_format), 'PriceRent': rentprice, 'Price': amazon_new_s, 'PriceLow': lowall_0_s, 'OfferCount': totaloffercount, 'Other1Format': unicode(other1format), 'Other1ASIN': other1asin, 'Other2Format': unicode(other2format), 'Other2ASIN': other2asin, 'Other3Format': unicode(other3format), 'Other3ASIN': other3asin, 'Newer_Edition': newer, 'TradeIn': unicode(tradeinprice), 'NewStockCount': new_stock_count_s, 'NewStockStatus': new_stock_status_s, 'NewRestockDate': new_restock_date_s, 'Date': today_date})
 
 
 if __name__ == '__main__':
